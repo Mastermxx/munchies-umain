@@ -8,6 +8,10 @@
 		priority = false,
 		onclick
 	}: { filter: Filter; active?: boolean; priority?: boolean; onclick: () => void } = $props();
+
+	function hideOnError(event: Event) {
+		(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
+	}
 </script>
 
 <button
@@ -26,6 +30,7 @@
 		aria-hidden="true"
 		loading={priority ? 'eager' : 'lazy'}
 		fetchpriority={priority ? 'high' : undefined}
+		onerror={hideOnError}
 		class="pointer-events-none absolute top-0 -right-3 bottom-0 w-20 object-contain"
 	/>
 </button>

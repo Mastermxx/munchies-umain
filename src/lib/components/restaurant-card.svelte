@@ -3,6 +3,10 @@
 	import type { Restaurant } from '$lib/features/domain/types';
 
 	let { restaurant, isOpen }: { restaurant: Restaurant; isOpen: boolean } = $props();
+
+	function hideOnError(event: Event) {
+		(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
+	}
 </script>
 
 <article
@@ -42,6 +46,7 @@
 		src={resolveImageUrl(restaurant.image_url)}
 		alt={restaurant.name}
 		loading="lazy"
+		onerror={hideOnError}
 		class="pointer-events-none absolute -top-7.5 -right-6.5 h-35 w-35 shrink-0 object-contain lg:-right-8.5 {isOpen
 			? ''
 			: 'grayscale opacity-40'}"

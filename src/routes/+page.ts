@@ -9,12 +9,17 @@ import type { PageLoad } from './$types';
 export const prerender = true;
 
 export const load: PageLoad = async () => {
-	const [restaurants, filters, priceRanges] = await Promise.all([
-		getRestaurants(),
-		getFilters(),
-		getPriceRanges()
-	]);
-	const openStatusByRestaurantId = await getOpenStatuses(restaurants.map((r) => r.id));
+	try {
+		const [restaurants, filters, priceRanges] = await Promise.all([
+			getRestaurants(),
+			getFilters(),
+			getPriceRanges()
+		]);
+		const openStatusByRestaurantId = await getOpenStatuses(restaurants.map((r) => r.id));
 
-	return { restaurants, filters, priceRanges, openStatusByRestaurantId };
+		return { ok: true as const, restaurants, filters, priceRanges, openStatusByRestaurantId };
+	} catch (error) {
+		console.error('Failed to load restaurant data', error);
+		return { ok: false as const };
+	}
 };
