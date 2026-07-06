@@ -13,7 +13,7 @@
 	<EmptyState variant="empty" subtext="Try adjusting or clearing your filters." />
 {:else}
 	<div
-		class="flex flex-col gap-4 lg:max-w-253.75 lg:flex-row lg:flex-wrap lg:gap-4.25"
+		class="grid grid-cols-[repeat(auto-fill,minmax(17rem,1fr))] gap-4 lg:max-w-253.75 lg:gap-4.25"
 		data-testid="restaurant-list"
 	>
 		{#each restaurants as restaurant (restaurant.id)}

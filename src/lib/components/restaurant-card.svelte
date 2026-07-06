@@ -17,10 +17,14 @@
 	function hideOnError(event: Event) {
 		(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
 	}
+
+	function starFill(starIndex: number, rating: number): number {
+		return Math.max(0, Math.min(1, rating - starIndex)) * 100;
+	}
 </script>
 
 <article
-	class="group relative flex h-50.5 w-full flex-col justify-between overflow-hidden rounded-lg border-[0.6px] border-gray-200 bg-white p-4 transition-shadow hover:shadow-md lg:w-81.75"
+	class="group relative flex h-50.5 w-full flex-col justify-between overflow-hidden rounded-lg border-[0.6px] border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
 	data-testid={`restaurant-card-${restaurant.id}`}
 >
 	<div class="relative z-10 flex flex-wrap items-center gap-2">
@@ -62,29 +66,59 @@
 			: 'grayscale opacity-40'}"
 	/>
 
-	<div class="relative z-10 mt-6 flex items-center justify-between gap-2">
-		<span
-			class="min-w-0 truncate pb-0.5 text-xl leading-tight font-normal tracking-tightest {isOpen
-				? ''
-				: 'text-gray-300'}"
+	<div class="relative z-10 mt-6 flex min-w-0 flex-col gap-1">
+		<div
+			class="flex items-center gap-1"
+			aria-label={`Rated ${restaurant.rating} out of 5`}
 		>
-			{restaurant.name}
-		</span>
-		<span
-			class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-colors {isOpen
-				? 'bg-cta-green group-hover:brightness-90'
-				: 'bg-cta-green/40'}"
-			aria-hidden="true"
-		>
-			<svg viewBox="0 0 16 16" fill="none" class="h-4 w-4">
-				<path
-					d="M3 8h10M9 4l4 4-4 4"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-			</svg>
-		</span>
+			{#each { length: 5 } as _, i (i)}
+				<span class="relative inline-block h-3 w-3 shrink-0" aria-hidden="true">
+					<svg viewBox="0 0 20 20" class="absolute inset-0 h-full w-full text-gray-200">
+						<path
+							fill="currentColor"
+							d="M10 1.5l2.5 5.6 6.1.6-4.6 4.1 1.4 6-5.4-3.2-5.4 3.2 1.4-6-4.6-4.1 6.1-.6z"
+						/>
+					</svg>
+					<svg
+						viewBox="0 0 20 20"
+						class="absolute inset-0 h-full w-full text-[#eeac2e]"
+						style="clip-path: inset(0 {100 - starFill(i, restaurant.rating)}% 0 0)"
+					>
+						<path
+							fill="currentColor"
+							d="M10 1.5l2.5 5.6 6.1.6-4.6 4.1 1.4 6-5.4-3.2-5.4 3.2 1.4-6-4.6-4.1 6.1-.6z"
+						/>
+					</svg>
+				</span>
+			{/each}
+			<span class="text-xs leading-none font-normal text-gray-500">
+				{restaurant.rating.toFixed(1)}
+			</span>
+		</div>
+		<div class="flex items-center justify-between gap-2">
+			<span
+				class="min-w-0 truncate pb-0.5 text-xl leading-tight font-normal tracking-tightest {isOpen
+					? ''
+					: 'text-gray-300'}"
+			>
+				{restaurant.name}
+			</span>
+			<span
+				class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-colors {isOpen
+					? 'bg-cta-green group-hover:brightness-90'
+					: 'bg-cta-green/40'}"
+				aria-hidden="true"
+			>
+				<svg viewBox="0 0 16 16" fill="none" class="h-4 w-4">
+					<path
+						d="M3 8h10M9 4l4 4-4 4"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</span>
+		</div>
 	</div>
 </article>
