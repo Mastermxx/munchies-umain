@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import RestaurantBrowser from '$lib/components/restaurant-browser.svelte';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
+</script>
+
+<RestaurantBrowser
+	restaurants={data.restaurants}
+	filters={data.filters}
+	priceRanges={data.priceRanges}
+	openStatusByRestaurantId={data.openStatusByRestaurantId}
+/>
