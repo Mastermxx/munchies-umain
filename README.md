@@ -1,26 +1,32 @@
-# sv
+# Munchies
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A restaurant browser built for Umain's Work Test — browse restaurants, filter
+by food category, delivery time, and price range, from either a desktop
+sidebar or a mobile top bar.
 
-## Creating a project
+**Live:** _add your deployed URL here_
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Stack
+
+- SvelteKit + Svelte 5 (runes), TypeScript
+- Tailwind CSS v4
+- Vitest + `vitest-browser-svelte` (unit + component tests), Playwright (e2e)
+- Prettier + ESLint
+
+The app fetches restaurants, filters, and price ranges from the
+[Munchies API](https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api-docs/)
+at build time (`src/routes/+page.ts`, prerendered) and ships as a fully
+static site — there's no server-side runtime.
+
+## Setup
+
+Requires Node.js and npm.
 
 ```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.16.2 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:none" mcp="ide:claude-code,vscode+setup:local" vitest="usages:unit,component" playwright --install npm .
+npm install
 ```
 
 ## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```sh
 npm run dev
@@ -31,12 +37,40 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
-
 ```sh
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+This prerenders the app against the live API, so an internet connection is
+required at build time. Preview the production build with:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```sh
+npm run preview
+```
+
+## Testing
+
+```sh
+npm run test:unit    # unit + component tests (Vitest)
+npm run test:e2e     # end-to-end tests (Playwright)
+npm run test         # both
+```
+
+## Linting & formatting
+
+```sh
+npm run lint     # prettier --check + eslint
+npm run format   # prettier --write
+```
+
+## Project structure
+
+- `src/lib/features/api/` — the API client (one function per endpoint,
+  runtime response-shape validation)
+- `src/lib/features/domain/` — pure filtering logic and the reactive
+  filter-selection state, both framework-independent and unit-tested
+- `src/lib/components/` — presentational Svelte components (filter chips,
+  category cards, restaurant cards/list, empty/error states, the mobile
+  welcome overlay)
+- `src/routes/` — the single page: loads data at build time and renders the
+  restaurant browser
