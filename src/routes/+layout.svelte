@@ -25,7 +25,14 @@
 	}
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<title>Munchies — Find Your Next Restaurant</title>
+	<meta
+		name="description"
+		content="Treat yourself. Find the best restaurants in your city and get it delivered to your place!"
+	/>
+	<link rel="icon" href={favicon} />
+</svelte:head>
 {#if showWelcome}
 	<WelcomeScreen onContinue={dismissWelcome} />
 {/if}

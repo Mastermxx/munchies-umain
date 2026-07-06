@@ -81,7 +81,7 @@
 					</svg>
 					<svg
 						viewBox="0 0 20 20"
-						class="absolute inset-0 h-full w-full text-[#eeac2e]"
+						class="absolute inset-0 h-full w-full {isOpen ? 'text-[#eeac2e]' : 'text-[#eeac2e]/40'}"
 						style="clip-path: inset(0 {100 - starFill(i, restaurant.rating)}% 0 0)"
 					>
 						<path
