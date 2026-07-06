@@ -1,8 +1,18 @@
 <script lang="ts">
 	import { resolveImageUrl } from '$lib/features/api/munchies';
+	import {
+		DELIVERY_TIME_BUCKETS,
+		getDeliveryTimeBucketId
+	} from '$lib/features/domain/delivery-time';
 	import type { Restaurant } from '$lib/features/domain/types';
 
 	let { restaurant, isOpen }: { restaurant: Restaurant; isOpen: boolean } = $props();
+
+	let deliveryTimeLabel = $derived(
+		DELIVERY_TIME_BUCKETS.find(
+			(bucket) => bucket.id === getDeliveryTimeBucketId(restaurant.delivery_time_minutes)
+		)?.label ?? `${restaurant.delivery_time_minutes} min`
+	);
 
 	function hideOnError(event: Event) {
 		(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
@@ -28,7 +38,7 @@
 			<span
 				class="flex h-7 items-center rounded-full border-[0.6px] border-gray-200 bg-white py-2 pr-3 pl-3 text-xs leading-none font-normal tracking-tightest text-gray-700"
 			>
-				{restaurant.delivery_time_minutes} min
+				{deliveryTimeLabel}
 			</span>
 		{/if}
 	</div>
@@ -52,9 +62,9 @@
 			: 'grayscale opacity-40'}"
 	/>
 
-	<div class="relative z-10 mt-6 flex items-end justify-between gap-2">
+	<div class="relative z-10 mt-6 flex items-center justify-between gap-2">
 		<span
-			class="min-w-0 truncate text-xl leading-none font-normal tracking-tightest {isOpen
+			class="min-w-0 truncate pb-0.5 text-xl leading-tight font-normal tracking-tightest {isOpen
 				? ''
 				: 'text-gray-300'}"
 		>

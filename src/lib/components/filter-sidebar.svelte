@@ -37,7 +37,7 @@
 		<h3 class="mb-4 text-xs leading-none font-semibold tracking-tightest text-gray-400 uppercase">
 			Delivery time
 		</h3>
-		<div class="grid grid-cols-2 gap-2" role="group" aria-label="Delivery time">
+		<div class="flex flex-wrap gap-2" role="group" aria-label="Delivery time">
 			{#each DELIVERY_TIME_BUCKETS as bucket (bucket.id)}
 				<FilterChip
 					label={bucket.label}
