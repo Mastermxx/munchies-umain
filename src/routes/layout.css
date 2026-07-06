@@ -1,1 +1,18 @@
 @import 'tailwindcss';
+
+@theme {
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto,
+		Helvetica, Arial, sans-serif;
+	--color-cta-green: #00703a;
+	--color-hairline: #0000001a;
+	--color-pill-closed: #fafafa;
+	--tracking-tightest: -0.5px;
+	--shadow-floating:
+		-4px 2px 10px 0px #00000003, -16px 9px 18px 0px #00000003, -35px 20px 24px 0px #00000000,
+		-63px 36px 29px 0px #00000000, -98px 56px 32px 0px #00000000;
+}
+
+body {
+	font-family: var(--font-sans);
+}

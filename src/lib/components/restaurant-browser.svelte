@@ -24,17 +24,24 @@
 	let visibleRestaurants = $derived(
 		sortByOpenStatus(filterRestaurants(restaurants, selection), openStatusByRestaurantId)
 	);
+
+	function scrollHorizontally(event: WheelEvent) {
+		const el = event.currentTarget as HTMLElement;
+		el.scrollLeft += event.deltaY;
+		event.preventDefault();
+	}
 </script>
 
 <div class="flex flex-1">
 	<FilterSidebar {filters} {priceRanges} {selection} />
 
-	<main class="min-w-0 flex-1 px-6 pb-6 lg:px-8 lg:pb-8">
+	<main class="min-w-0 flex-1 px-6 pb-6 lg:px-8 lg:pt-0 lg:pb-8">
 		<div
 			class="mb-4 flex gap-3 overflow-x-auto pb-2"
 			role="group"
 			aria-label="Food category"
 			data-testid="filter-category-card-row"
+			onwheel={scrollHorizontally}
 		>
 			{#each filters as filter, index (filter.id)}
 				<FilterCategoryCard
@@ -48,7 +55,9 @@
 
 		<MobileDeliveryFilters {selection} />
 
-		<h1 class="mb-6 text-xl font-normal">Restaurant's</h1>
+		<h1 class="mb-6 text-xl leading-none font-normal tracking-tightest lg:text-[40px]">
+			Restaurant's
+		</h1>
 
 		<RestaurantList restaurants={visibleRestaurants} {openStatusByRestaurantId} />
 	</main>

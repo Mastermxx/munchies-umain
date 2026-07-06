@@ -12,13 +12,15 @@
 </script>
 
 <aside
-	class="hidden w-56 shrink-0 flex-col rounded-xl border border-gray-200 bg-white p-6 lg:flex"
+	class="hidden w-56 shrink-0 flex-col self-start rounded-xl border-[0.6px] border-hairline bg-white p-6 shadow-floating lg:mt-0 lg:mr-0 lg:mb-6 lg:ml-6 lg:flex"
 	data-testid="filter-sidebar"
 >
-	<h2 class="mb-6 text-2xl font-normal">Filter</h2>
+	<h2 class="mb-6 text-2xl leading-none font-normal tracking-tightest">Filter</h2>
 
 	<section class="flex flex-col pb-6">
-		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Food category</h3>
+		<h3 class="mb-4 text-xs leading-none font-semibold tracking-tightest text-gray-400 uppercase">
+			Food category
+		</h3>
 		<div class="flex flex-col gap-2" role="group" aria-label="Food category">
 			{#each filters as filter (filter.id)}
 				<FilterChip
@@ -32,7 +34,9 @@
 	</section>
 
 	<section class="flex flex-col pb-6">
-		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Delivery time</h3>
+		<h3 class="mb-4 text-xs leading-none font-semibold tracking-tightest text-gray-400 uppercase">
+			Delivery time
+		</h3>
 		<div class="grid grid-cols-2 gap-2" role="group" aria-label="Delivery time">
 			{#each DELIVERY_TIME_BUCKETS as bucket (bucket.id)}
 				<FilterChip
@@ -46,7 +50,9 @@
 	</section>
 
 	<section class="flex flex-col">
-		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Price range</h3>
+		<h3 class="mb-4 text-xs leading-none font-semibold tracking-tightest text-gray-400 uppercase">
+			Price range
+		</h3>
 		<div class="flex flex-wrap gap-2" role="group" aria-label="Price range">
 			{#each priceRanges as priceRange (priceRange.id)}
 				<FilterChip

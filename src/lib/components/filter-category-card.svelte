@@ -12,14 +12,14 @@
 
 <button
 	type="button"
-	class="relative flex h-20 w-40 shrink-0 items-start rounded-lg border p-3 text-left {active
-		? 'border-[#00703A]'
-		: 'border-gray-200'}"
+	class="relative flex h-20 w-40 shrink-0 items-start rounded-lg border-[0.6px] p-3 text-left tracking-tightest shadow-floating transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none {active
+		? 'border-cta-green bg-white text-gray-900 shadow-md hover:bg-gray-50'
+		: 'border-hairline bg-white text-gray-900 hover:border-gray-300 hover:bg-gray-50'}"
 	aria-pressed={active}
 	data-testid={`filter-category-card-${filter.id}`}
 	{onclick}
 >
-	<span class="text-sm">{filter.name}</span>
+	<span class="text-sm font-normal tracking-tightest">{filter.name}</span>
 	<img
 		src={resolveImageUrl(filter.image_url)}
 		alt=""
