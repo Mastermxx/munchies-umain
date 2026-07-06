@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { DELIVERY_TIME_BUCKETS } from '$lib/features/domain/delivery-time';
+	import type { FilterSelection } from '$lib/features/domain/filter-selection.svelte';
 	import type { Filter, PriceRange } from '$lib/features/domain/types';
+	import FilterChip from './filter-chip.svelte';
 
-	let { filters, priceRanges }: { filters: Filter[]; priceRanges: PriceRange[] } = $props();
+	let {
+		filters,
+		priceRanges,
+		selection
+	}: { filters: Filter[]; priceRanges: PriceRange[]; selection: FilterSelection } = $props();
 </script>
 
 <aside
@@ -15,14 +21,12 @@
 		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Food category</h3>
 		<div class="flex flex-col gap-2" role="group" aria-label="Food category">
 			{#each filters as filter (filter.id)}
-				<button
-					type="button"
-					class="rounded-lg border border-gray-200 px-3 py-2 text-left text-xs"
-					aria-pressed="false"
-					data-testid={`filter-chip-category-sidebar-${filter.id}`}
-				>
-					{filter.name}
-				</button>
+				<FilterChip
+					label={filter.name}
+					active={selection.isSelected('category', filter.id)}
+					testid={`filter-chip-category-sidebar-${filter.id}`}
+					onclick={() => selection.toggle('category', filter.id)}
+				/>
 			{/each}
 		</div>
 	</section>
@@ -31,14 +35,12 @@
 		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Delivery time</h3>
 		<div class="grid grid-cols-2 gap-2" role="group" aria-label="Delivery time">
 			{#each DELIVERY_TIME_BUCKETS as bucket (bucket.id)}
-				<button
-					type="button"
-					class="rounded-lg border border-gray-200 px-3 py-2 text-left text-xs"
-					aria-pressed="false"
-					data-testid={`filter-chip-delivery-sidebar-${bucket.id}`}
-				>
-					{bucket.label}
-				</button>
+				<FilterChip
+					label={bucket.label}
+					active={selection.isSelected('deliveryTime', bucket.id)}
+					testid={`filter-chip-delivery-sidebar-${bucket.id}`}
+					onclick={() => selection.toggle('deliveryTime', bucket.id)}
+				/>
 			{/each}
 		</div>
 	</section>
@@ -47,14 +49,13 @@
 		<h3 class="mb-4 text-xs font-semibold text-gray-400 uppercase">Price range</h3>
 		<div class="flex flex-wrap gap-2" role="group" aria-label="Price range">
 			{#each priceRanges as priceRange (priceRange.id)}
-				<button
-					type="button"
-					class="rounded-lg border border-gray-200 p-2 text-xs"
-					aria-pressed="false"
-					data-testid={`filter-chip-price-${priceRange.id}`}
-				>
-					{priceRange.range}
-				</button>
+				<FilterChip
+					label={priceRange.range}
+					variant="price-range"
+					active={selection.isSelected('priceRange', priceRange.id)}
+					testid={`filter-chip-price-${priceRange.id}`}
+					onclick={() => selection.toggle('priceRange', priceRange.id)}
+				/>
 			{/each}
 		</div>
 	</section>

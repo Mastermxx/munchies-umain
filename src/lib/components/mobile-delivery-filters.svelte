@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { DELIVERY_TIME_BUCKETS } from '$lib/features/domain/delivery-time';
+	import type { FilterSelection } from '$lib/features/domain/filter-selection.svelte';
+	import FilterChip from './filter-chip.svelte';
+
+	let { selection }: { selection: FilterSelection } = $props();
 </script>
 
 <div
@@ -9,13 +13,11 @@
 	data-testid="mobile-delivery-filters"
 >
 	{#each DELIVERY_TIME_BUCKETS as bucket (bucket.id)}
-		<button
-			type="button"
-			class="shrink-0 rounded-lg border border-gray-200 px-3 py-2 text-xs whitespace-nowrap"
-			aria-pressed="false"
-			data-testid={`filter-chip-delivery-mobile-${bucket.id}`}
-		>
-			{bucket.label}
-		</button>
+		<FilterChip
+			label={bucket.label}
+			active={selection.isSelected('deliveryTime', bucket.id)}
+			testid={`filter-chip-delivery-mobile-${bucket.id}`}
+			onclick={() => selection.toggle('deliveryTime', bucket.id)}
+		/>
 	{/each}
 </div>
