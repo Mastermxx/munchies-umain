@@ -36,10 +36,12 @@
 	<FilterSidebar {filters} {priceRanges} {selection} />
 
 	<main class="min-w-0 flex-1 px-6 pb-6 lg:px-8 lg:pt-0 lg:pb-8">
+		<MobileDeliveryFilters {selection} />
+
 		<div
-			class="mb-4 flex gap-3 overflow-x-auto pb-2"
+			class="-mr-6 mb-4 flex gap-3 overflow-x-auto pb-2 lg:-mr-8"
 			role="group"
-			aria-label="Food category"
+			aria-label="Food category filters"
 			data-testid="filter-category-card-row"
 			onwheel={scrollHorizontally}
 		>
@@ -52,8 +54,6 @@
 				/>
 			{/each}
 		</div>
-
-		<MobileDeliveryFilters {selection} />
 
 		<h1 class="mb-6 text-xl leading-none font-normal tracking-tightest lg:text-[40px]">
 			Restaurant's

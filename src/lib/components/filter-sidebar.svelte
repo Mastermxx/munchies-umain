@@ -12,7 +12,7 @@
 </script>
 
 <aside
-	class="hidden w-56 shrink-0 flex-col self-start rounded-xl border-[0.6px] border-hairline bg-white p-6 shadow-floating lg:mt-0 lg:mr-0 lg:mb-6 lg:ml-6 lg:flex"
+	class="hidden w-56 shrink-0 flex-col self-start rounded-xl border-[0.6px] border-hairline bg-white p-6 shadow-floating lg:mt-0 lg:mr-0 lg:mb-6 lg:ml-8 lg:flex"
 	data-testid="filter-sidebar"
 >
 	<h2 class="mb-6 text-2xl leading-none font-normal tracking-tightest">Filter</h2>
