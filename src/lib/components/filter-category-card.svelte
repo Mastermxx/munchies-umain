@@ -16,7 +16,7 @@
 </script>
 
 <button
-	use:bounceOnClick
+	{@attach bounceOnClick()}
 	type="button"
 	class="relative flex h-20 w-40 shrink-0 items-start rounded-lg border-[0.6px] border-hairline p-3 text-left tracking-tightest shadow-floating transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none {active
 		? 'bg-white text-gray-900 shadow-md hover:bg-gray-50'

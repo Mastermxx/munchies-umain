@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { horizontalWheelScroll } from '$lib/actions/horizontal-wheel-scroll';
 	import { DELIVERY_TIME_BUCKETS } from '$lib/features/domain/delivery-time';
 	import type { FilterSelection } from '$lib/features/domain/filter-selection.svelte';
 	import FilterChip from './filter-chip.svelte';
@@ -10,7 +11,12 @@
 	<h3 class="mb-4 text-xs leading-none font-semibold tracking-tightest text-gray-400 uppercase">
 		Delivery time
 	</h3>
-	<div class="flex gap-2 overflow-x-auto pb-2" role="group" aria-label="Delivery time filters">
+	<div
+		class="flex gap-2 overflow-x-auto pb-2"
+		role="group"
+		aria-label="Delivery time filters"
+		{@attach horizontalWheelScroll()}
+	>
 		{#each DELIVERY_TIME_BUCKETS as bucket (bucket.id)}
 			<FilterChip
 				label={bucket.label}

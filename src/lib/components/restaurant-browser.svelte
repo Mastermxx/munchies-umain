@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { horizontalWheelScroll } from '$lib/actions/horizontal-wheel-scroll';
 	import { FilterSelection } from '$lib/features/domain/filter-selection.svelte';
 	import { filterRestaurants, sortByOpenStatus } from '$lib/features/domain/filtering';
 	import type { Filter, PriceRange, Restaurant } from '$lib/features/domain/types';
@@ -24,33 +25,6 @@
 	let visibleRestaurants = $derived(
 		sortByOpenStatus(filterRestaurants(restaurants, selection), openStatusByRestaurantId)
 	);
-
-	function scrollHorizontally(event: WheelEvent) {
-		const el = event.currentTarget as HTMLElement;
-		const maxScrollLeft = el.scrollWidth - el.clientWidth;
-		if (maxScrollLeft <= 0) return;
-
-		if (!event.shiftKey && Math.abs(event.deltaY) >= Math.abs(event.deltaX)) {
-			window.scrollBy({ top: event.deltaY });
-			event.preventDefault();
-			return;
-		}
-
-		const delta =
-			event.shiftKey && event.deltaX === 0
-				? event.deltaY
-				: Math.abs(event.deltaX) > Math.abs(event.deltaY)
-					? event.deltaX
-					: 0;
-		if (delta === 0) return;
-
-		const atStart = el.scrollLeft <= 0 && delta < 0;
-		const atEnd = el.scrollLeft >= maxScrollLeft && delta > 0;
-		if (atStart || atEnd) return;
-
-		el.scrollLeft += delta;
-		event.preventDefault();
-	}
 </script>
 
 <div class="flex">
@@ -64,7 +38,7 @@
 			role="group"
 			aria-label="Food category filters"
 			data-testid="filter-category-card-row"
-			onwheel={scrollHorizontally}
+			{@attach horizontalWheelScroll()}
 		>
 			{#each filters as filter, index (filter.id)}
 				<FilterCategoryCard
