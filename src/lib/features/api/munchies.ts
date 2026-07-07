@@ -8,6 +8,10 @@ export function resolveImageUrl(imageUrl: string): string {
 	return `${API_ORIGIN}${imageUrl}`;
 }
 
+export function hideOnError(event: Event) {
+	(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
+}
+
 class ApiShapeError extends Error {
 	constructor(context: string, value: unknown) {
 		super(`Unexpected response shape from ${context}: ${JSON.stringify(value)}`);
@@ -67,6 +71,22 @@ export async function getRestaurants(fetchFn: Fetch = fetch): Promise<Restaurant
 	return list;
 }
 
+export async function getRestaurant(
+	id: string,
+	fetchFn: Fetch = fetch
+): Promise<Restaurant | undefined> {
+	const response = await fetchFn(`${API_BASE_URL}/restaurants/${id}`);
+	if (response.status === 404) return undefined;
+	if (!response.ok) {
+		throw new Error(`Request to /restaurants/${id} failed with status ${response.status}`);
+	}
+	const body = await response.json();
+	if (!isRestaurant(body)) {
+		throw new ApiShapeError(`GET /restaurants/${id}`, body);
+	}
+	return body;
+}
+
 export async function getFilters(fetchFn: Fetch = fetch): Promise<Filter[]> {
 	const body = await fetchJson(fetchFn, '/filter');
 	const list = (body as { filters?: unknown }).filters;
@@ -84,7 +104,10 @@ export async function getPriceRanges(fetchFn: Fetch = fetch): Promise<PriceRange
 	return body;
 }
 
-export async function getOpenStatus(restaurantId: string, fetchFn: Fetch = fetch): Promise<OpenStatus> {
+export async function getOpenStatus(
+	restaurantId: string,
+	fetchFn: Fetch = fetch
+): Promise<OpenStatus> {
 	const body = await fetchJson(fetchFn, `/open/${restaurantId}`);
 	if (!isOpenStatus(body)) {
 		throw new ApiShapeError(`GET /open/${restaurantId}`, body);

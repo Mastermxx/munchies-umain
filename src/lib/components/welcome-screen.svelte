@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-cta-green px-6 pt-24 pb-6 lg:hidden"
+	class="fixed inset-0 z-50 flex h-dvh flex-col overflow-hidden bg-cta-green px-6 pt-24 pb-6"
 	role="dialog"
 	aria-modal="true"
 	aria-label="Welcome"

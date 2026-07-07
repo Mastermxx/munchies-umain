@@ -21,3 +21,10 @@ export function getDeliveryTimeBucketId(minutes: number): string | undefined {
 		(bucket) => minutes >= bucket.minMinutes && minutes <= bucket.maxMinutes
 	)?.id;
 }
+
+export function getDeliveryTimeLabel(minutes: number): string {
+	return (
+		DELIVERY_TIME_BUCKETS.find((bucket) => bucket.id === getDeliveryTimeBucketId(minutes))?.label ??
+		`${minutes} min`
+	);
+}

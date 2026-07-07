@@ -1,26 +1,13 @@
 <script lang="ts">
-	import { resolveImageUrl } from '$lib/features/api/munchies';
-	import {
-		DELIVERY_TIME_BUCKETS,
-		getDeliveryTimeBucketId
-	} from '$lib/features/domain/delivery-time';
+	import { resolve } from '$app/paths';
+	import { hideOnError, resolveImageUrl } from '$lib/features/api/munchies';
+	import { getDeliveryTimeLabel } from '$lib/features/domain/delivery-time';
 	import type { Restaurant } from '$lib/features/domain/types';
+	import StarRating from './star-rating.svelte';
 
 	let { restaurant, isOpen }: { restaurant: Restaurant; isOpen: boolean } = $props();
 
-	let deliveryTimeLabel = $derived(
-		DELIVERY_TIME_BUCKETS.find(
-			(bucket) => bucket.id === getDeliveryTimeBucketId(restaurant.delivery_time_minutes)
-		)?.label ?? `${restaurant.delivery_time_minutes} min`
-	);
-
-	function hideOnError(event: Event) {
-		(event.currentTarget as HTMLImageElement).style.visibility = 'hidden';
-	}
-
-	function starFill(starIndex: number, rating: number): number {
-		return Math.max(0, Math.min(1, rating - starIndex)) * 100;
-	}
+	let deliveryTimeLabel = $derived(getDeliveryTimeLabel(restaurant.delivery_time_minutes));
 </script>
 
 <article
@@ -67,31 +54,7 @@
 	/>
 
 	<div class="relative z-10 mt-6 flex min-w-0 flex-col gap-1">
-		<div class="flex items-center gap-1" aria-label={`Rated ${restaurant.rating} out of 5`}>
-			{#each { length: 5 } as _star, i (i)}
-				<span class="relative inline-block h-3 w-3 shrink-0" aria-hidden="true">
-					<svg viewBox="0 0 20 20" class="absolute inset-0 h-full w-full text-gray-200">
-						<path
-							fill="currentColor"
-							d="M10 1.5l2.5 5.6 6.1.6-4.6 4.1 1.4 6-5.4-3.2-5.4 3.2 1.4-6-4.6-4.1 6.1-.6z"
-						/>
-					</svg>
-					<svg
-						viewBox="0 0 20 20"
-						class="absolute inset-0 h-full w-full {isOpen ? 'text-[#eeac2e]' : 'text-[#eeac2e]/40'}"
-						style="clip-path: inset(0 {100 - starFill(i, restaurant.rating)}% 0 0)"
-					>
-						<path
-							fill="currentColor"
-							d="M10 1.5l2.5 5.6 6.1.6-4.6 4.1 1.4 6-5.4-3.2-5.4 3.2 1.4-6-4.6-4.1 6.1-.6z"
-						/>
-					</svg>
-				</span>
-			{/each}
-			<span class="text-xs leading-none font-normal text-gray-500">
-				{restaurant.rating.toFixed(1)}
-			</span>
-		</div>
+		<StarRating rating={restaurant.rating} dimmed={!isOpen} />
 		<div class="flex items-center justify-between gap-2">
 			<span
 				class="min-w-0 truncate pb-0.5 text-xl leading-tight font-normal tracking-tightest {isOpen
@@ -100,11 +63,12 @@
 			>
 				{restaurant.name}
 			</span>
-			<span
+			<a
+				href={resolve('/restaurant/[id]', { id: restaurant.id })}
+				aria-label={`View ${restaurant.name}`}
 				class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white transition-colors {isOpen
 					? 'bg-cta-green group-hover:brightness-90'
 					: 'bg-cta-green/40'}"
-				aria-hidden="true"
 			>
 				<svg viewBox="0 0 16 16" fill="none" class="h-4 w-4">
 					<path
@@ -115,7 +79,7 @@
 						stroke-linejoin="round"
 					/>
 				</svg>
-			</span>
+			</a>
 		</div>
 	</div>
 </article>

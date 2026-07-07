@@ -1,15 +1,22 @@
 <script lang="ts">
 	import './layout.css';
+	import { MediaQuery } from 'svelte/reactivity';
 	import favicon from '$lib/assets/favicon.png';
 	import AppHeader from '$lib/components/app-header.svelte';
 	import WelcomeScreen from '$lib/components/welcome-screen.svelte';
 
 	let { children } = $props();
 
-	let showWelcome = $state(true);
+	const isTouchNarrowViewport = new MediaQuery(
+		'(pointer: coarse) and (hover: none) and (max-width: 1023px)',
+		false
+	);
+
+	let dismissed = $state(false);
+	let showWelcome = $derived(isTouchNarrowViewport.current && !dismissed);
 
 	function dismissWelcome() {
-		showWelcome = false;
+		dismissed = true;
 	}
 </script>
 
