@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { bounceOnClick } from '$lib/actions/bounce-on-click';
+
 	type Variant = 'default' | 'price-range';
 
 	let {
@@ -24,6 +26,7 @@
 </script>
 
 <button
+	use:bounceOnClick
 	type="button"
 	class="self-start rounded-lg text-left text-xs leading-tight font-normal whitespace-nowrap tracking-tightest transition-colors focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none {variantClass} {active
 		? 'border-cta-green bg-cta-green text-white shadow-md hover:bg-cta-green'

@@ -15,10 +15,6 @@
 		}
 	});
 
-	$effect(() => {
-		document.documentElement.classList.toggle('overflow-hidden', showWelcome);
-	});
-
 	function dismissWelcome() {
 		showWelcome = false;
 		sessionStorage.setItem('welcomeSeen', '1');
