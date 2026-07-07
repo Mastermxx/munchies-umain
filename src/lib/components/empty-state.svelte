@@ -1,5 +1,5 @@
 <script lang="ts">
-	import gsap from 'gsap';
+	import { fadeIn } from '$lib/actions/fade-in';
 
 	type Variant = 'empty' | 'error';
 
@@ -10,18 +10,10 @@
 		variant?: Variant;
 		subtext: string;
 	} = $props();
-
-	function animateIn(node: HTMLElement) {
-		gsap.fromTo(
-			node,
-			{ opacity: 0, scale: 0.95 },
-			{ opacity: 1, scale: 1, duration: 0.35, ease: 'power1.out' }
-		);
-	}
 </script>
 
 <div
-	use:animateIn
+	{@attach fadeIn({ scale: 0.95 })}
 	class="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-gray-200 p-12 text-center"
 	role={variant === 'error' ? 'alert' : undefined}
 	data-testid={variant === 'error' ? 'restaurant-list-error-state' : 'restaurant-list-empty-state'}

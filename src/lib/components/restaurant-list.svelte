@@ -1,11 +1,15 @@
-<script lang="ts">
+<script module lang="ts">
 	import { Flip } from 'gsap/Flip';
 	import gsap from 'gsap';
-	import type { Restaurant } from '$lib/features/domain/types';
-	import EmptyState from './empty-state.svelte';
-	import RestaurantCard from './restaurant-card.svelte';
 
 	gsap.registerPlugin(Flip);
+</script>
+
+<script lang="ts">
+	import type { Restaurant } from '$lib/features/domain/types';
+	import { animateFadeIn } from '$lib/actions/fade-in';
+	import EmptyState from './empty-state.svelte';
+	import RestaurantCard from './restaurant-card.svelte';
 
 	let {
 		restaurants,
@@ -21,7 +25,6 @@
 	let showPreHydrateStyle = $state(true);
 
 	let isAnimating = false;
-	let hasPendingUpdate = false;
 
 	// The template renders `displayedRestaurants`, not `restaurants` directly.
 	// A filter change while a FLIP transition is still animating must NOT
@@ -29,27 +32,26 @@
 	// GSAP mid-tween (corrupting positions/opacity permanently). So the raw
 	// prop is only copied into the rendered snapshot when idle; while
 	// animating, the change is deferred and applied once the current
-	// transition completes.
+	// transition completes (see the `onComplete` callbacks below).
+	// svelte-ignore state_referenced_locally (intentional one-time snapshot of the initial prop value)
 	let displayedRestaurants = $state(restaurants);
 
 	$effect(() => {
-		restaurants;
-		if (isAnimating) {
-			hasPendingUpdate = true;
-		} else {
+		void restaurants;
+		if (!isAnimating) {
 			displayedRestaurants = restaurants;
 		}
 	});
 
 	$effect.pre(() => {
-		displayedRestaurants;
-		if (gridEl) {
+		void displayedRestaurants;
+		if (gridEl && hasMounted) {
 			flipState = Flip.getState(gridEl.children);
 		}
 	});
 
 	$effect(() => {
-		displayedRestaurants;
+		void displayedRestaurants;
 		if (!hasMounted) {
 			hasMounted = true;
 			showPreHydrateStyle = false;
@@ -60,21 +62,15 @@
 				// two fight over the same transform/opacity, corrupting the
 				// final resting position.
 				isAnimating = true;
-				gsap.fromTo(
+				animateFadeIn(
 					gridEl.children,
-					{ opacity: 0, y: 20 },
+					{ y: 20 },
 					{
-						opacity: 1,
-						y: 0,
 						stagger: 0.05,
 						duration: 0.4,
-						ease: 'power1.out',
 						onComplete: () => {
 							isAnimating = false;
-							if (hasPendingUpdate) {
-								hasPendingUpdate = false;
-								displayedRestaurants = restaurants;
-							}
+							displayedRestaurants = restaurants;
 						}
 					}
 				);
@@ -91,32 +87,13 @@
 		isAnimating = true;
 		Flip.from(flipState, {
 			targets: gridEl.children,
-			duration: 0.4,
-			ease: 'power1.inOut',
+			duration: 0,
 			absolute: true,
-			stagger: 0.03,
-			onEnter: (elements) =>
-				gsap.fromTo(
-					elements,
-					{ opacity: 0, scale: 0.9, y: 20 },
-					{
-						opacity: 1,
-						scale: 1,
-						y: 0,
-						duration: 0.35,
-						delay: 0.2,
-						stagger: 0.03,
-						ease: 'power1.inOut'
-					}
-				),
 			onLeave: (elements) =>
 				gsap.to(elements, { opacity: 0, scale: 0.9, duration: 0.3, ease: 'power1.inOut' }),
 			onComplete: () => {
 				isAnimating = false;
-				if (hasPendingUpdate) {
-					hasPendingUpdate = false;
-					displayedRestaurants = restaurants;
-				}
+				displayedRestaurants = restaurants;
 			}
 		});
 	}

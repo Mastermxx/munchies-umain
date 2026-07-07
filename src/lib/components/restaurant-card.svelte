@@ -67,11 +67,8 @@
 	/>
 
 	<div class="relative z-10 mt-6 flex min-w-0 flex-col gap-1">
-		<div
-			class="flex items-center gap-1"
-			aria-label={`Rated ${restaurant.rating} out of 5`}
-		>
-			{#each { length: 5 } as _, i (i)}
+		<div class="flex items-center gap-1" aria-label={`Rated ${restaurant.rating} out of 5`}>
+			{#each { length: 5 } as _star, i (i)}
 				<span class="relative inline-block h-3 w-3 shrink-0" aria-hidden="true">
 					<svg viewBox="0 0 20 20" class="absolute inset-0 h-full w-full text-gray-200">
 						<path
