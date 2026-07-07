@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logoWhite from '$lib/assets/logo-white.png';
+	import { asset } from '$app/paths';
 
 	let { onContinue }: { onContinue: () => void } = $props();
 </script>
@@ -10,7 +10,7 @@
 	aria-modal="true"
 	aria-label="Welcome"
 >
-	<img src={logoWhite} alt="Munchies" class="h-6 w-auto self-start" />
+	<img src={asset('/logo-white.png')} alt="Munchies" class="h-6 w-auto self-start" />
 
 	<div class="flex flex-1 flex-col justify-center">
 		<h1
