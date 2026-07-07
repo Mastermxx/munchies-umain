@@ -35,10 +35,19 @@
 	// transition completes (see the `onComplete` callbacks below).
 	// svelte-ignore state_referenced_locally (intentional one-time snapshot of the initial prop value)
 	let displayedRestaurants = $state(restaurants);
+	// Plain (non-reactive) tracker of which `restaurants` reference is currently
+	// reflected in `displayedRestaurants`. `$state` re-wraps arrays in a new proxy
+	// on every assignment, so re-assigning `displayedRestaurants = restaurants` even
+	// when `restaurants` hasn't changed still looks like a change to the effects
+	// below — causing them to re-trigger forever. This guard makes the sync a no-op
+	// once it's already up to date.
+	// svelte-ignore state_referenced_locally (intentional one-time snapshot of the initial prop value)
+	let syncedRestaurants = restaurants;
 
 	$effect(() => {
 		void restaurants;
-		if (!isAnimating) {
+		if (!isAnimating && restaurants !== syncedRestaurants) {
+			syncedRestaurants = restaurants;
 			displayedRestaurants = restaurants;
 		}
 	});
@@ -70,7 +79,10 @@
 						duration: 0.4,
 						onComplete: () => {
 							isAnimating = false;
-							displayedRestaurants = restaurants;
+							if (restaurants !== syncedRestaurants) {
+								syncedRestaurants = restaurants;
+								displayedRestaurants = restaurants;
+							}
 						}
 					}
 				);
@@ -88,12 +100,14 @@
 		Flip.from(flipState, {
 			targets: gridEl.children,
 			duration: 0,
-			absolute: true,
 			onLeave: (elements) =>
 				gsap.to(elements, { opacity: 0, scale: 0.9, duration: 0.3, ease: 'power1.inOut' }),
 			onComplete: () => {
 				isAnimating = false;
-				displayedRestaurants = restaurants;
+				if (restaurants !== syncedRestaurants) {
+					syncedRestaurants = restaurants;
+					displayedRestaurants = restaurants;
+				}
 			}
 		});
 	}
